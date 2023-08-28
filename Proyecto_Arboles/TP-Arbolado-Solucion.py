@@ -6,18 +6,13 @@ def leer_parque(nombre_archivo: str, parque: str) -> list[dict]:
     Gnera una lista de diccionarios con el nombre de un archivo y un parque
     que este contenido en el archivo. El param nombre_archivo debe contener
     el directorio en caso de ser ejecutado desde un proyecto de spyder cuya
-    solución albergue inmediatamente el archivo.
+    solución albergue inmediatamente el archivo. Se asigna automáticamente 
+    los nombres con la primera fila.
     """ 
-    cols_names: str = """long,lat,id_arbol,altura_tot,diametro,inclinacio,
-        id_especie,nombre_com,nombre_cie,tipo_folla,espacio_ve,ubicacion,
-        nombre_fam,nombre_gen,origen,coord_x,coord_y"""
-    cols: str = cols_names.split(",")
-    
     res: list = []
     with open(nombre_archivo, encoding="utf8", newline="") as cvsfile:
-        freader = csv.DictReader(cvsfile, cols, delimiter=",")
+        freader = csv.DictReader(cvsfile, delimiter=",")
         for row in freader:
-            print(row)
             if row["espacio_ve"] == parque:
                 res.append(row)
     return res
