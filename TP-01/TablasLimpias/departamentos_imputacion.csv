@@ -1,0 +1,187 @@
+provincia,departamento,departamento_bahra
+buenos aires,carmen de patagones,patagones
+buenos aires,los cardales,campana
+buenos aires,darregueira,puan
+buenos aires,general madariaga,general juan madariaga
+buenos aires,parada robles,exaltacion de la cruz
+buenos aires,mar del plata,general pueyrredon
+buenos aires,villalonga,patagones
+buenos aires,juan a. pradere,patagones
+buenos aires,alvear,general alvear
+buenos aires,monte grande,esteban echeverria
+buenos aires,pigue,saavedra
+buenos aires,alejandro korn,san vicente
+buenos aires,vergara,magdalena
+buenos aires,tres sargentos,carmen de areco
+buenos aires,orense,tres arroyos
+buenos aires,perez millan,ramallo
+catamarca,altos de singuil,ambato
+catamarca,el barrialito,tinogasta
+catamarca,bañado de ovanta,santa rosa
+cordoba,villa maria,general san martin
+cordoba,alejo ledesma,marcos juarez
+cordoba,sebastian elcano,rio seco
+cordoba,villa berna,calamuchita
+corrientes,la cruz,calamuchita
+chaco,alte. brown,almirante brown
+chaco,puerto eva peron,bermejo
+chubut,pico de salamanca,escalante
+chubut,zona rural rio mayo,rio senguer
+chubut,languineo,languiñeo
+chubut,cholila,cushamen
+chubut,el hoyo,cushamen
+chubut,comodoro rivadavia,escalante
+chubut,camarones,florentino ameghino
+chubut,garayalde,florentino ameghino
+chubut,peninsula valdes,biedma
+chubut,trelew,rawson
+chubut,los antiguos,lago buenos aires
+chubut,"paso de los indios, gastre y tehuelches",gastre
+chubut,paso de los indios,gastre
+chubut,lago puelo,cushamen
+chubut,esquel,futaleufu
+chubut,gaiman (bahia bustamante),gaiman
+entre rios,chañar,feliciano
+entre rios,concepcion del uruguay,uruguay
+entre rios,chajari,federacion
+entre rios,san jaime,federacion
+entre rios,basavilbaso,uruguay
+entre rios,yuqueri,concordia
+formosa,san francisco laishi,laishi
+formosa,laguna blanca,pilcomayo
+jujuy,san pedro de jujuy,san pedro
+jujuy,chucarezna,humahuaca
+jujuy,yuto,ledesma
+jujuy,depto. el carmen,el carmen
+jujuy,perico,el carmen
+jujuy,pampa blanca,el carmen
+jujuy,la esperanza,san pedro
+jujuy,los manantiales,el carmen
+jujuy,depto el carmen,el carmen
+jujuy,palma sola,santa barbara
+la pampa,miguel cane,quemu quemu
+la rioja,la rioja,capital
+la rioja,aimogasta,arauco
+la rioja,dto. capital,capital
+mendoza,guyamallen,guaymallen
+mendoza,la consulta,san carlos
+mendoza,el mirador,rivadavia
+mendoza,malargue,malargüe
+mendoza,fray luis beltran,maipu
+mendoza,los barriales,junin
+mendoza,mendoza,capital
+mendoza,ugarteche,lujan de cuyo
+mendoza,vista flores,tunuyan
+mendoza,villa atuel,san rafael
+misiones,santo pipo,san ignacio
+misiones,los helechos,obera
+misiones,ruiz de montoya,libertador general san martin
+misiones,ruiz de mendoza,libertador general san martin
+misiones,posadas,capital
+misiones,comandante andresito,general manuel belgrano
+neuquen,centenario,confluencia
+neuquen,san patricio del cañar,añelo
+neuquen,san patricio del chañar,añelo
+neuquen,vista alegre,confluencia
+rio negro,el bolson,bariloche
+rio negro,cipolletti,general roca
+rio negro,chichinales,general roca
+rio negro,general e. godoy,general roca
+rio negro,villa regina,general roca
+rio negro,allen,general roca
+rio negro,cinco saltos,general roca
+rio negro,valle azul,el cuy
+rio negro,ingeniero huergo,general roca
+rio negro,viedma,adolfo alsina
+rio negro,villa manzano,general roca
+rio negro,clemente onelli,25 de mayo
+rio negro,mainque,general roca
+salta,payogasta,cachi
+salta,el algarrobal,general jose de san martin
+salta,embarcacion,general jose de san martin
+salta,pichanal,oran
+salta,güemes,general güemes
+salta,campo santo,general güemes
+salta,urundel,oran
+salta,general mosconi,general jose de san martin
+salta,san jose de orquera,metan
+san juan,iglesias,iglesia
+san luis,san francisco del monte de oro,ayacucho
+san luis,santa rosa de conlara,junin
+santa cruz,puerto deseado,deseado
+santa cruz,rio gallegos,güer aike
+santa cruz,koluel kaike,deseado
+santa cruz,depto lago argentino (zona rural),lago argentino
+santa cruz,lago bs. as.,lago buenos aires
+santa fe,fighiera,rosario
+santa fe,cap. bermudez,san lorenzo
+santa fe,funes,rosario
+santa fe,romang,san javier
+santa fe,gral lopez,general lopez
+santa fe,monte vera,la capital
+santiago del estero,termas de rio hondo,rio hondo
+tucuman,el molino,chicligasta
+tucuman,la invernada,la cocha
+tucuman,soldado maldonado,monteros
+tierra del fuego,almanza,ushuaia
+buenos aires,cardales,campana
+buenos aires,abasto,la plata
+buenos aires,villa martelli,vicente lopez
+buenos aires,boulogne,san isidro
+buenos aires,chilavert,general san martin
+buenos aires,florida,vicente lopez
+buenos aires,paso del rey,moreno
+buenos aires,mayor buratovich,villarino
+buenos aires,valentin alsina,lanus
+buenos aires,sierra de la ventana / cnel suarez,tornquist
+buenos aires,bordenave,puan
+buenos aires,beccar,san isidro
+buenos aires,burzaco,almirante brown
+cordoba,la palestina,general san martin
+cordoba,ticino,general san martin
+cordoba,alta gracia,santa maria
+cordoba,cabrera,juarez celman
+corrientes,gobernador virasoro,santo tome
+chaco,margarita belen,1º de mayo
+chaco,el sauzalito,general güemes
+entre rios,los charruas,concordia
+la rioja,colonia ortiz de ocampo,general ocampo
+la rioja,villa union,coronel felipe varela
+la rioja,campo grande,cainguas
+mendoza,cruz de piedra,maipu
+mendoza,colonia lopez,san rafael
+mendoza,libertad/distr. rivadavia,rivadavia
+mendoza,rama caida,san rafael
+mendoza,guaymayen,guaymallen
+mendoza,chacras de coria,lujan de cuyo
+misiones,campo viera,obera
+misiones,posadas / obera,capital
+neuquen,añelo,añelo
+neuquen,plottier,confluencia
+rio negro,rio colorado,pichi mahuida
+rio negro,lamarque,avellaneda
+rio negro,san carlos de bariloche,bariloche
+rio negro,chimpay,avellaneda
+rio negro,chichinales,general roca
+salta,salta capital,capital
+salta,ruta  34 km 1135,general güemes
+san juan,las casuarinas,25 de mayo
+santa fe,coronda,san jeronimo
+santa fe,santa fe,la capital
+santiago del estero,santiago del estero,capital
+tucuman,acheral,monteros
+tucuman,san miguel de tucuman,capital
+tucuman,los nogales,caseros
+buenos aires,martinez,san isidro
+buenos aires,olivos,vicente lopez
+buenos aires,del viso,pilar
+buenos aires,tres argentos,carmen de areco
+catamarca,san fernando del valle de catamarca,capital
+cordoba,cordoba,capital
+cordoba,barrio villa belgrano,calamuchita
+cordoba,cordoba capital,capital
+neuquen,centenario,confluencia
+neuquen,neuquen,confluencia
+salta,salta,capital
+san juan,barrio rawson,rawson
+tucuman,aguilares,rio chico
