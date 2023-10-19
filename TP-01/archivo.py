@@ -188,7 +188,7 @@ padron['departamento'] = df_res_imputacion['valor_definitivo']
 consultaSQL = 
             """
             SELECT DISTINCT p.Productos , p.Provincia
-            FROM padron as p
+            FROM padron AS p
             ORDER BY p.Productos, p.Provincia;
             """
 print(sql^consultaSQL)
@@ -197,9 +197,9 @@ print(sql^consultaSQL)
 consultaSQL2 =
             """
             SELECT e.clae2
-            FROM establecimientos as e
+            FROM establecimientos AS e
             HAVING COUNT(e.clae2) = (SELECT MAX(COUNT(e2.clae2))
-                                    FROM establecimientos as e2);
+                                    FROM establecimientos AS e2);
             """
 print(sql^consultaSQL2)
 
@@ -211,15 +211,40 @@ print(sql^consultaSQL3)
 #4
 consultaSQL4 =
             """
-            SELECT p.departamento
-            FROM padron as p
-            WHEN p.certificadora_deno = NULL;
+            SELECT l.nombre_departamento
+            FROM localidad AS l
+            WHERE NOT EXISTS (SELECT NULL
+                             FROM padron AS p
+                             WHERE p.departamento = l.nombre_departamento);
             """
-# podemos ver que no hay ningun depto que cumpla esto , entonces nos devuelve una tabla vacia.
+# los deptos que cumplan lo pedido, van a aparecer en esta tabla
 print(sql^consultaSQL4)
+# para saber cuantos son hago la cantidad de cosas q tiene mi tabla, y luego para saber si existen o no , veo si la cantidad es 0 o mayor
+
+#5
+consultaSQL5 =
+        
+
+print(sql^consultaSQL5)
 
 
-
+#6
+consultaSQL6 =
+            """
+            SELECT l.nombre_provincia , l.nombre_departamento , COUNT(SELECT *
+                                                   FROM establecimientos AS e
+                                                   WHEN e.provincia = l.nombre_provincia 
+                                                   AND e.departamento = l.nombre_departamento
+                                                   AND e.Letra != 'A') AS cant_establecimientos_productivos , 
+                                                   COUNT(SELECT *
+                                                        FROM padron AS p
+                                                        WHEN p.provincia = l.nombre_provincia
+                                                        AND p.departamento = l.nombre_departamento
+                                                        )AS cant_emprendimientos_organicos
+            FROM localidad AS l;
+            """
+# deberia dar una tabla con provincia depto y dsp que diga la cantidad de cada cosa q pide en esa prov depto especificos
+print(sql^consultaSQL6)
 
 
 
