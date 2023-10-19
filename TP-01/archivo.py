@@ -1,7 +1,7 @@
 '''
 Autores:    
     gantes, augusto
-    
+    D'Andrea, Matias
 '''
 
 import pandas as pd
@@ -182,5 +182,38 @@ padron['departamento'] = df_res_imputacion['valor_definitivo']
 # fue exitosa o eso parece
 
 ###############################################################################
+
+# Ejercicios SQL
+#1
+consultaSQL = 
+            """
+            SELECT p.Productos , x.Provincia
+            FROM sdas as p
+            INNER JOIN asda as x
+            WHEN
+            """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
