@@ -238,9 +238,14 @@ print(sql^consultaSQL4)
 # para saber cuantos son hago la cantidad de cosas q tiene mi tabla, y luego para saber si existen o no , veo si la cantidad es 0 o mayor
 
 #5
-consultaSQL5 =
-        
 
+consultaSQL5 =
+            """
+            SELECT l.nombre_provincia ,  AS promedio_participacion_mujeres  
+            FROM localidad AS l;
+            """
+# para este ejercicio pense en comparar el proporcion_mujeres de establecimientos con los empleados de la misma tabla, para eso elegimos un numero de empleados
+# por ejemplo el minimo, y por cada provincia iteramos en cuantos empleados hay y en cuanta prop de mujeres hay(sumando todos los valores por provincia), luego hacemos eel porcentaje ente esos numeros 
 print(sql^consultaSQL5)
 
 
