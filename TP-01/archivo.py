@@ -171,13 +171,15 @@ df_merge_imputacion = pd.merge(padron, imputacion_departamento,
                                on=['provincia', 'departamento'],
                                how='left')
 df_merge_imputacion['valor_definitivo'] = df_merge_imputacion[
-    'departamento_bahra'].fillna(padron['departamento'])
+    'departamento_bahra'].fillna(localidad['nombre_departamento'])
 df_res_imputacion = df_merge_imputacion[['valor_definitivo']]
 
 # Asignamos el valor final
 padron['departamento'] = df_res_imputacion['valor_definitivo']
 
-# TODO chequear esto ultimo, estoy dormido
+# Si corremos la metrica anterior que verifica si tenemos los departamentos
+# de padron pertenecientes a la base de localidad ahora da 100%, la imputacion
+# fue exitosa o eso parece
 
 ###############################################################################
 
