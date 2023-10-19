@@ -183,6 +183,22 @@ padron['departamento'] = df_res_imputacion['valor_definitivo']
 
 ###############################################################################
 
+# CORRECCION DE LA RAZON SOCIAL
+consultaSQLrazonsocial =
+                        """
+                        SELECT *
+                        FROM padron as p
+                        WHEN (p.establecimiento LIKE "NC") 
+                        THEN p.establecimiento = p.razón social;
+                        """
+
+print(sql^consultaSQLrazonsocial)
+
+
+
+
+
+
 # Ejercicios SQL
 #1
 consultaSQL = 
@@ -233,12 +249,12 @@ consultaSQL6 =
             """
             SELECT l.nombre_provincia , l.nombre_departamento , COUNT(SELECT *
                                                    FROM establecimientos AS e
-                                                   WHEN e.provincia = l.nombre_provincia 
+                                                   WHERE e.provincia = l.nombre_provincia 
                                                    AND e.departamento = l.nombre_departamento
                                                    AND e.Letra != 'A') AS cant_establecimientos_productivos , 
                                                    COUNT(SELECT *
                                                         FROM padron AS p
-                                                        WHEN p.provincia = l.nombre_provincia
+                                                        WHERE p.provincia = l.nombre_provincia
                                                         AND p.departamento = l.nombre_departamento
                                                         )AS cant_emprendimientos_organicos
             FROM localidad AS l;
