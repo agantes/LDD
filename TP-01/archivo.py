@@ -203,9 +203,20 @@ consultaSQL2 =
             """
 print(sql^consultaSQL2)
 
+#3
 
 
+print(sql^consultaSQL3)
 
+#4
+consultaSQL4 =
+            """
+            SELECT p.departamento
+            FROM padron as p
+            WHEN p.certificadora_deno = NULL;
+            """
+# podemos ver que no hay ningun depto que cumpla esto , entonces nos devuelve una tabla vacia.
+print(sql^consultaSQL4)
 
 
 
