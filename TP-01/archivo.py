@@ -187,10 +187,16 @@ padron['departamento'] = df_res_imputacion['valor_definitivo']
 #1
 consultaSQL = 
             """
-            SELECT p.Productos , x.Provincia
-            FROM sdas as p
-            INNER JOIN asda as x
-            WHEN
+            SELECT DISTINCT p.Productos , p.Provincia
+            FROM padron as p
+            ORDER BY p.Productos, p.Provincia
+            """
+print(sql^consultaSQL)
+
+#2
+consultaSQL2 =
+            """
+            SELECT 
             """
 
 
