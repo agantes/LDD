@@ -189,15 +189,21 @@ consultaSQL =
             """
             SELECT DISTINCT p.Productos , p.Provincia
             FROM padron as p
-            ORDER BY p.Productos, p.Provincia
+            ORDER BY p.Productos, p.Provincia;
             """
 print(sql^consultaSQL)
 
 #2
 consultaSQL2 =
             """
-            SELECT 
+            SELECT e.clae2
+            FROM establecimientos as e
+            HAVING COUNT(e.clae2) = (SELECT MAX(COUNT(e2.clae2))
+                                    FROM establecimientos as e2);
             """
+print(sql^consultaSQL2)
+
+
 
 
 
