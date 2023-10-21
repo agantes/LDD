@@ -150,7 +150,8 @@ diferencia_cjto(dep_localidad, dep_padron)
 
 
 # limpieza de padron
-padron=
+archivo_padron = 'TP-01/TablasOriginales/padron-de-operadores-organicos-certificados.csv'
+padron = pd.read_csv(archivo_padron, encoding='latin1').copy(deep=True)
 # CORRECCION DE LA RAZON SOCIAL
 consultaSQLrazonsocial =
                         """
