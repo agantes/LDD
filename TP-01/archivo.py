@@ -295,6 +295,34 @@ consultaSQL6 =
 print(sql^consultaSQL6)
 
 
+#EJERCICIOS DE VISUALIZACION
+
+
+
+#EJERCICIO 1
+
+# Cargar los datos
+archivo_establecimiento_productivo = 'TP-01/TablasLimpias/establecimientos_productivos.csv'
+establecimiento_productivo = pd.read_csv(archivo_establecimiento_productivo)
+
+# Calcular la cantidad de establecimientos por provincia
+establecimientos_por_provincia = establecimiento_productivo['provincia'].value_counts()
+
+# Crear un gráfico de barras
+plt.figure(figsize=(12, 6))  # Ajusta el tamaño de la figura
+establecimientos_por_provincia.plot(kind='bar')
+plt.title('Cantidad de Establecimientos por Provincia')
+plt.xlabel('Provincia')
+plt.ylabel('Cantidad de Establecimientos')
+plt.xticks(rotation=45)  # Rotar las etiquetas del eje x para mayor legibilidad
+plt.tight_layout()  # Ajustar el diseño del gráfico
+
+# Mostrar el gráfico
+plt.show()
+
+#EJERCICIO 2
+
+
 
 
 
