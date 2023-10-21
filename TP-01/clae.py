@@ -38,12 +38,32 @@ campos_organicos = [
 archivo_clae = 'TP-01/TablasOriginales/clae_agg.csv'
 clae = pd.read_csv(archivo_clae).copy(deep=True) 
 
-clae.drop(columns=["clae6",
+dicc.drop(columns=["clae6",
                  "clae6_desc",
                  "clae3",
                  "clae3_desc"],
         inplace=True)
 
-clae_cols = clae.columns
-#print(clae_cols) verifico que se hayan eliminado las columnas 
-dicc_sin_duplicados = dicc.drop_duplicates(subset=['clae2', 'clae2_desc']) #creo la nueva tabla
+dicc_cols = dicc.columns
+#print(dicc_cols)
+dicc_sin_duplicados = dicc.drop_duplicates(subset=['clae2', 'clae2_desc'])
+
+
+# Tu código para cargar el DataFrame y realizar las operaciones iniciales
+
+# Define todos los separadores que deseas utilizar
+separadores = [' Y ', ' y ', '-', '?']
+
+# Crea una copia del DataFrame sin duplicados para evitar modificar el original
+dicc_separado = dicc_sin_duplicados.copy()
+
+# Itera a través de los separadores y realiza las operaciones de separación
+for separador in separadores:
+    # Separa las celdas de 'clae2_desc' usando el separador actual
+    dicc_separado['clae2_desc'] = dicc_separado['clae2_desc'].str.split(separador)
+    
+    # Explota el DataFrame para crear filas separadas para cada elemento resultante
+    dicc_separado = dicc_separado.explode('clae2_desc')
+
+# Restablece el índice
+dicc_separado.reset_index(drop=True, inplace=True)
