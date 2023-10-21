@@ -40,7 +40,7 @@ clae = pd.read_csv(archivo_clae).copy(deep=True)
 
 consultaSQL = 
             """
-            SELECT DISTINCT c.clae2 , c.clae2_desc
+            SELECT DISTINCT c.clae2 , c.clae2_desc , c.letra
             FROM clae AS c
             ORDER BY c.clae2;
             """
