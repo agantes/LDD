@@ -38,13 +38,12 @@ campos_organicos = [
 archivo_clae = 'TP-01/TablasOriginales/clae_agg.csv'
 clae = pd.read_csv(archivo_clae).copy(deep=True) 
 
-consultaSQL = 
-            """
-            SELECT DISTINCT c.clae2 , c.clae2_desc , c.letra
-            FROM clae AS c
-            ORDER BY c.clae2;
-            """
-claes_limpias = sql^consultaSQL
+clae.drop(columns=["clae6",
+                 "clae6_desc",
+                 "clae3",
+                 "clae3_desc"],
+        inplace=True)
 
-
-
+clae_cols = clae.columns
+#print(clae_cols) verifico que se hayan eliminado las columnas 
+dicc_sin_duplicados = dicc.drop_duplicates(subset=['clae2', 'clae2_desc']) #creo la nueva tabla
