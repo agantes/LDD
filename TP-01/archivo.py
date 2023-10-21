@@ -183,26 +183,10 @@ padron['departamento'] = df_res_imputacion['valor_definitivo']
 
 ###############################################################################
 
-# CORRECCION DE LA RAZON SOCIAL
-consultaSQLrazonsocial =
-                        """
-                        SELECT *
-                        FROM padron as p
-                        WHEN (p.establecimiento LIKE "NC") 
-                        THEN p.establecimiento = p.razón social;
-                        """
-
-print(sql^consultaSQLrazonsocial)
-
-
-
-
-
 
 # Ejercicios SQL
 #1
-consultaSQL = 
-            """
+consultaSQL ="""
             SELECT DISTINCT p.Productos , p.Provincia
             FROM padron AS p
             ORDER BY p.Productos, p.Provincia;
@@ -210,8 +194,7 @@ consultaSQL =
 print(sql^consultaSQL)
 
 #2
-consultaSQL2 =
-            """
+consultaSQL2 ="""
             SELECT e.clae2
             FROM establecimientos AS e
             HAVING COUNT(e.clae2) = (SELECT MAX(COUNT(e2.clae2))
@@ -220,16 +203,14 @@ consultaSQL2 =
 print(sql^consultaSQL2)
 
 #3
-consultaSQL3.1 =
-            """
+consultaSQL3.1 ="""
             SELECT TRIM(p.productos) AS productos
             FROM padron AS p
             CROSS APPLY STRING_SPLIT(Columna1, ',')
             """
 prod_limpios = sql^consultaSQL3.1
 
-consultaSQL3.2 =
-            """
+consultaSQL3.2 ="""
             SELECT productos
             FROM prod_limpios
             HAVING COUNT(productos) = (SELECT MAX(COUNT(productos))
@@ -240,16 +221,14 @@ producto_abundante = sql^consultaSQL3.2
 print(sql^consultaSQL3.2)
 
 # ahora tengo que ver en que provincias y departamentos se produce
-consultaSQL3.3 =
-            """
+consultaSQL3.3 ="""
             SELECT DISTINCT p.provincia , p.departamento
             FROM padron AS p
             WHERE p.productos LIKE '%producto_abundante%';
             """
 print(sql^consultaSQL3.3) #devuelve una tabla que nos dice en que departamentos se produce nuestro producto abundante
 #4
-consultaSQL4 =
-            """
+consultaSQL4 ="""
             SELECT l.nombre_departamento
             FROM localidad AS l
             WHERE NOT EXISTS (SELECT NULL
@@ -262,8 +241,7 @@ print(sql^consultaSQL4)
 
 #5
 
-consultaSQL5 =
-            """
+consultaSQL5 ="""
             SELECT l.nombre_provincia , (SUM(SELECT e.proporcion_mujeres
                                             FROM establecimientos AS e
                                             WHERE e.provincia LIKE l.nombre_provincia) / COUNT(SELECT e.proporcion_mujeres
@@ -277,8 +255,7 @@ print(sql^consultaSQL5)
 
 
 #6
-consultaSQL6 =
-            """
+consultaSQL6 ="""
             SELECT l.nombre_provincia , l.nombre_departamento , COUNT(SELECT *
                                                    FROM establecimientos AS e
                                                    WHERE e.provincia = l.nombre_provincia 
