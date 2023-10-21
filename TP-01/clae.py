@@ -35,11 +35,13 @@ campos_organicos = [
 
 
 # limpio la tabla de claes con lo que nos importa a nosotros
+archivo_clae = 'TP-01/TablasOriginales/clae_agg.csv'
+clae = pd.read_csv(archivo_clae).copy(deep=True) 
 
 consultaSQL = 
             """
             SELECT DISTINCT c.clae2 , c.clae2_desc
-            FROM claes AS c
+            FROM clae AS c
             ORDER BY c.clae2;
             """
 claes_limpias = sql^consultaSQL
