@@ -152,13 +152,23 @@ diferencia_cjto(dep_localidad, dep_padron)
 # limpieza de padron
 archivo_padron = 'TP-01/TablasOriginales/padron-de-operadores-organicos-certificados.csv'
 padron = pd.read_csv(archivo_padron, encoding='latin1').copy(deep=True)
-# CORRECCION DE LA RAZON SOCIAL
-consultaSQLrazonsocial =
-                        """
-                        SELECT *
-                        FROM padron as p
-                        WHEN (p.establecimiento LIKE "NC") 
-                        THEN p.establecimiento = p.razón social;
-                        """
+# Correccion del establecimiento, si tiene "NC", le ponemos el valor de la razón social. 
+df['establecimiento'] = df.apply(lambda row: row['razón social'] if row['establecimiento'] == 'NC' else row['establecimiento'], axis=1)
+# Divide las columnas "productos" y "rubro" en listas separadas por comas
+df['productos'] = df['productos'].str.split(', ')
+df['rubro'] = df['rubro'].str.split(', ')
 
-print(sql^consultaSQLrazonsocial)
+# Defino los otros separadores que voy a utilizar
+separadores = [' Y ', '-', '?']
+
+# Itera a través de los separadores y realiza las operaciones de separar en distintas filas los distintos "productos" y "rubro"
+for separador in separadores:
+    df = df.explode('productos')
+    df['productos'] = df['productos'].str.split(separador)
+    df['productos'] = df['productos'].str.get(0)  # Selecciona el primer elemento
+    df = df.explode('rubro')
+    df['rubro'] = df['rubro'].str.split(separador)
+    df['rubro'] = df['rubro'].str.get(0)  # Selecciona el primer elemento
+
+# Restablecee el índice
+df.reset_index(drop=True, inplace=True)
