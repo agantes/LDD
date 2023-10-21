@@ -155,10 +155,37 @@ porcentaje_departamentos_registrables = 100 * (
     departamentos_con_coincidencia / departamentos_unicos)
 porcentaje_departamentos_registrables 
 
+
+# Vemos cuantos departamentos
+departamentos_registrados = 0
+for dep in padron['departamento']:
+    if dep in localidad['nombre_departamento'].unique():
+        departamentos_registrados += 1
+    else: continue
+departamentos_registrados
+
 # Observamos que hay un 46% de los departamentos que, por alguna razon, no 
 # tienen coincidencia alguna con la base de datos de BAHRA
 # Podemos incluso ver si los que no aparecen en departamento estan en alguna
 # otra columna de la tabla de localidad
+
+# Hay un problema de compatibilidad relacionado con la capital de buenos aires
+# Todos las tablas originales contienen una forma diferente para referirse 
+# a la capital y sus departamentos
+establecimientos['provincia'] = normalizar_str(
+    establecimientos, 'provincia'
+    )
+establecimientos['departamento'] = normalizar_str(
+    establecimientos, 'departamento'
+    )
+padron['provincia'] = padron['provincia'].replace(
+    'ciudad autonoma buenos aires', 'caba'
+    )
+localidad['nombre_provincia'] = localidad['nombre_provincia'].replace(
+    'ciudad de buenos aires', 'caba'
+    )
+padron.loc[padron['provincia'] == 'caba', 'departamento'] = 'caba'
+localidad.loc[localidad['nombre_provincia'] == 'caba', 'nombre_departamento'] = 'caba'
 
 # Se realizo una inputacion a mano por ciertos problemas observados
 # Cargamos la tabla auxiliar que nos permite realizar una imputacion 
@@ -183,6 +210,14 @@ padron['departamento'] = df_res_imputacion['valor_definitivo']
 
 ###############################################################################
 
+consultaSQLrazonsocial = """
+  SELECT *
+  FROM padron as p
+  WHEN (p.establecimiento LIKE "NC") 
+  THEN p.establecimiento = p.razón social;
+  """
+
+print(sql^ consultaSQLrazonsocial)
 
 # Ejercicios SQL
 #1
@@ -203,30 +238,30 @@ consultaSQL2 ="""
 print(sql^consultaSQL2)
 
 #3
-consultaSQL3.1 ="""
+consultaSQL31 ="""
             SELECT TRIM(p.productos) AS productos
             FROM padron AS p
             CROSS APPLY STRING_SPLIT(Columna1, ',')
             """
-prod_limpios = sql^consultaSQL3.1
+prod_limpios = sql^consultaSQL31
 
-consultaSQL3.2 ="""
+consultaSQL32 ="""
             SELECT productos
             FROM prod_limpios
             HAVING COUNT(productos) = (SELECT MAX(COUNT(productos))
                                        FROM prod_limpios);
             """
-producto_abundante = sql^consultaSQL3.2
+producto_abundante = sql^consultaSQL32
 # Hasta aca obtengo el producto que más se produce 
-print(sql^consultaSQL3.2)
+print(sql^consultaSQL32)
 
 # ahora tengo que ver en que provincias y departamentos se produce
-consultaSQL3.3 ="""
+consultaSQL33 ="""
             SELECT DISTINCT p.provincia , p.departamento
             FROM padron AS p
             WHERE p.productos LIKE '%producto_abundante%';
             """
-print(sql^consultaSQL3.3) #devuelve una tabla que nos dice en que departamentos se produce nuestro producto abundante
+print(sql^consultaSQL33) #devuelve una tabla que nos dice en que departamentos se produce nuestro producto abundante
 #4
 consultaSQL4 ="""
             SELECT l.nombre_departamento
