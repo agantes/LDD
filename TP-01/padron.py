@@ -146,3 +146,18 @@ diferencia_cjto(dep_localidad, dep_padron)
 # Armo un algoritmo para ver similitud
 # Necesito encontrar el match para poder ver bien la correspondencia
 # de cada uno de los 356 departamentos unicos de padron
+
+
+
+# limpieza de padron
+padron=
+# CORRECCION DE LA RAZON SOCIAL
+consultaSQLrazonsocial =
+                        """
+                        SELECT *
+                        FROM padron as p
+                        WHEN (p.establecimiento LIKE "NC") 
+                        THEN p.establecimiento = p.razón social;
+                        """
+
+print(sql^consultaSQLrazonsocial)
