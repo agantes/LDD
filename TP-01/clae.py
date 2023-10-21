@@ -52,7 +52,7 @@ dicc_sin_duplicados = dicc.drop_duplicates(subset=['clae2', 'clae2_desc'])
 # Tu código para cargar el DataFrame y realizar las operaciones iniciales
 
 # Define todos los separadores que deseas utilizar
-separadores = [' Y ', ' y ', '-', '?']
+separadores = [' Y ', ' y ', '-', '?', ',']
 
 # Crea una copia del DataFrame sin duplicados para evitar modificar el original
 dicc_separado = dicc_sin_duplicados.copy()
