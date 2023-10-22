@@ -2,6 +2,7 @@
 Autores:    
     gantes, augusto
     D'Andrea, Matias
+    Belmes, Martin
 '''
 
 import pandas as pd
@@ -314,7 +315,7 @@ print(sql^consultaSQL6)
 #EJERCICIO 1
 
 # Cargar los datos
-archivo_establecimiento_productivo = 'TP-01/TablasLimpias/establecimientos_productivos.csv'
+archivo_establecimiento_productivo = 'TP-01/TablasLimpias/establecimiento_productivo.csv'
 establecimiento_productivo = pd.read_csv(archivo_establecimiento_productivo)
 
 # Calcular la cantidad de establecimientos por provincia
@@ -333,6 +334,97 @@ plt.tight_layout()  # Ajustar el diseño del gráfico
 plt.show()
 
 #EJERCICIO 2
+archivo_padron = ''TP-01/TablasLimpias/padron.csv''
+padron = pd.read_csv(archivo_padron)
+
+# Calcular la cantidad de productos por establecimiento
+productos_por_establecimiento = padron['establecimiento'].value_counts()
+
+# Crear un diccionario que mapea el establecimiento a la cantidad de productos
+establecimiento_productos_dict = dict(productos_por_establecimiento)
+
+# Agregar una columna al DataFrame 'padron' que muestre la cantidad de productos por establecimiento
+padron['cantidad_productos'] = padron['establecimiento'].map(establecimiento_productos_dict)
+
+# Crear un boxplot por provincia
+plt.figure(figsize=(12, 6))
+padron.boxplot(column='cantidad_productos', by='provincia')
+plt.title('Boxplot de Cantidad de Productos por Provincia')
+plt.xlabel('Provincia')
+plt.ylabel('Cantidad de Productos')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.suptitle('')  # Elimina el título predeterminado generado por pandas
+plt.show()
+
+#EJERCICIO 3
+estab_prod = pd.read_csv('TP-01/TablasLimpias/establecimiento_productivo.csv')
+padron_operadores_organicos = pd.read_csv('TP-01/TablasLimpias/padron.csv')
+rubro_clae2 = pd.read_csv('TP-01/TablasLimpias/rubro_clae2.csv')
+
+# 1. Crear una tabla de equivalencia entre la letra de CLAE y el rubro de operador orgánico
+equivalencia_rubro_clae = rubro_clae2[['rubro', 'CLAE2']]
+estab_prod['provincia'] = estab_prod['provincia'].str.lower()
+estab_prod['departamento'] = estab_prod['departamento'].str.lower()
+
+padron_operadores_organicos['provincia'] = padron_operadores_organicos['provincia'].str.lower()
+padron_operadores_organicos['departamento'] = padron_operadores_organicos['departamento'].str.lower()
+
+# 2. Unir las tablas padron_operadores_organicos y estab_prod por provincia y departamento
+merged_data = pd.merge(estab_prod, padron_operadores_organicos, on=['provincia', 'departamento'])
+
+
+# 3. Contar la cantidad de establecimientos de operadores orgánicos certificados por provincia y rubro
+establecimientos_certificados = merged_data.groupby(['provincia', 'rubro'])['establecimiento'].count().reset_index()
+
+# 4. Calcular la proporción promedio de mujeres empleadas en establecimientos productivos por provincia
+proporcion_mujeres_promedio = estab_prod.groupby('provincia')['proporcion_mujeres'].mean().reset_index()
+
+# 5. Combinar la información de cantidades de establecimientos certificados y la proporción de mujeres empleadas por provincia
+relacion_datos = pd.merge(establecimientos_certificados, proporcion_mujeres_promedio, on='provincia')
+
+
+# Crear un gráfico de dispersión con ejes rotados y valores escalados
+plt.figure(figsize=(12, 6))
+plt.scatter(relacion_datos['proporcion_mujeres'], relacion_datos['establecimiento'], alpha=0.5)
+plt.title('Relación entre Proporción de Mujeres Empleadas y Establecimientos Certificados')
+plt.xlabel('Proporción de Mujeres Empleadas')
+plt.ylabel('Cantidad de Establecimientos Certificados')
+plt.grid()
+
+# Ajustar manualmente las etiquetas del eje y para mostrar valores reales
+plt.gca().get_yaxis().get_major_formatter().set_useOffset(False)
+
+# Mostrar el gráfico
+plt.show()
+
+
+#EJERCICIO 4
+
+archivo_datos = 'TP-01/TablasLimpias/establecimiento_productivo.csv'
+datos = pd.read_csv(archivo_datos)
+
+# Crear un violinplot por provincia
+plt.figure(figsize=(12, 6))
+provincias = datos['provincia'].unique()
+
+violin_data = []
+provincia_labels = []
+
+for provincia in provincias:
+    provincia_data = datos[datos['provincia'] == provincia]['proporcion_mujeres']
+    violin_data.append(provincia_data)
+    provincia_labels.append(provincia)
+
+plt.violinplot(violin_data, showmedians=True, showextrema=False)
+plt.xticks(range(1, len(provincias) + 1), provincia_labels, rotation=45)
+plt.title('Distribución de la Proporción de Mujeres Empleadas por Provincia')
+plt.xlabel('Provincia')
+plt.ylabel('Proporción de Mujeres Empleadas')
+plt.tight_layout()
+
+# Mostrar el gráfico
+plt.show()
 
 
 
