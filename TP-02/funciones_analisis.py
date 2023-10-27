@@ -19,6 +19,7 @@ Este archivo contiene solamente funciones relacionadas con la exploración de
 los datos.
 '''
 
+
 def std_pixeles(df: pd.DataFrame, label=True) -> pd.DataFrame:
     '''
     Transforma el df en otro con los pixeles en una columna 'posicion' y 
@@ -99,6 +100,35 @@ def plot_map_std(mat: np.array, title: str) -> None:
     plt.title(title)
     plt.show()
     plt.close()
+
+
+def plot_dist_mat(df: pd.DataFrame, cota: float,
+                  title1: str, title2: str) -> None:
+    '''
+    Esta función genera un ploteo doble con la distribución de desviaciones
+    estándar junto a las posiciones de la imagen que tengan la std por debajo
+    de un valor cota. La cota se graficara en la distribución y el df debe ser
+    resultado de aplicar std_pixeles
+    '''
+    # Genero la matriz
+    imagen = map_std(df, cota)
+
+    # Grafico
+    fig, axes = plt.subplots(1, 2, figsize=(8, 4))
+    sns.scatterplot(data=df, x='posicion', y='std', ax=axes[0])
+    sns.kdeplot(data=df, x='posicion', y='std',
+                color='black', alpha=.5, ax=axes[0])
+    axes[0].axhline(cota, color='red', label='Cota')
+    axes[0].legend()
+    axes[0].grid()
+    axes[0].set_xlabel('Píxeles')
+    axes[0].set_ylabel('Desviación Estándar')
+    axes[0].set_title(title1)
+    axes[1].imshow(imagen, cmap='Greys')
+    axes[1].set_title(title2)
+    plt.show()
+    plt.close()
+
 
 if __name__ == '__main__':
     # Seccio=ón para posibles usos o pruebas
