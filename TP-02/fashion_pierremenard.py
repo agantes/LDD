@@ -16,10 +16,8 @@ Modificacion: 26/10/2023
 
 # %% Importacion de librerias
 import pandas as pd
-import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-import re
 import funciones_analisis as fa  # funciones de analisis
 
 # %% Carga de Datos
@@ -32,41 +30,35 @@ df.head()
 df.describe()  # el maximo y cuartiles varian bastante entre posiciones
 df.info()
 
-# %%% Desviacion estandar (std) por Pixel
+# %%% Metricas por Pixel (General)
 
 # Segun lo que vemos de lo variable que es la data segun posicion de pixel
 # nos preguntamos si es que hay posiciones que siempre sean de una misma
 # intensidad en la escala de grises, i.e., puede que no haya std.
-std_por_posicion = fa.std_pixeles(df)  # Modifico el df para analizar std p/pixel
+# Modifico el df para analizar std p/pixel y el promedio de los pixeles
+std_por_posicion = fa.std_pixeles(df)
+mean_por_posicion = fa.mean_pixeles(df)
 
-# Vemos como se distribuyen las disperciones
-fa.plot_std_pixeles(std_por_posicion, 'Desviación Estándar por Píxel')
+# Genero las matrices de desviación estándar y promedio
+mat_std = fa.map_metrica(std_por_posicion, 'std')
+mat_mean = fa.map_metrica(mean_por_posicion, 'mean')
 
-# Se observan muchas variables con poca variacion, incluso sin haber separado
-# por categoria. Tambien podemos ver que hay un cumulo de valores en la parte
-# inferior izquierda que contiene valores con std por debajo de 20.
+# Gráfico
+fa.plot_maps(mat_std, 'Desviación Estándar por Píxel',
+             mat_mean, 'Promedio por Píxel')
 
-# Genero una matrix de aquellos pixeles que tienen la desviacion estandar por
-# debajo de 20
-cota = 20
-mat_std = fa.map_std(std_por_posicion, cota)
-fa.plot_map_std(mat_std, 'Pixeles con Desviación Estándar menor a ' + str(cota))
-
-## Hacemos un plot de las figuras en cjto
-fa.plot_dist_mat(std_por_posicion, cota, 
-                 'Desviación Estándar por Píxel',
-                 'Píxeles con Desviación Estándar \ndebajo de ' + str(cota)
-                 )
+# Se observa que ciertos bordes tienen poca desviación estándar en relación al
+# resto de los píxeles. Podemos elegir una cota para eliminar ciertos datos
+# según su desvío estándar en las secciones dedicadas a inferencia.
 
 # Descarto variables que se usaron para graficar y computar
-del std_por_posicion, cota, mat_std
+del std_por_posicion, mean_por_posicion, mat_mean, mat_std
 
 # %%% Separacion por etiqueta
 # Vemos el recuento de clasificaciones
 df['label'].value_counts()  # es uniforme, 6000 entradas para las 10 etiquetas
 
 # Vemos si realmente el dataset contiene informacion diferente para cada label
-# diferente. Graficamos
 etiquetas = df['label'].unique()
 etiquetas.sort()
 
@@ -76,20 +68,17 @@ for etiqueta in etiquetas:
     df_etiqueta = df[df['label'] == etiqueta]
     df_etiqueta = df_etiqueta.drop('label', axis=1)
 
-    # Calculamos desviación y graficamos
-    df_etiqueta_std_pixel = fa.std_pixeles(df_etiqueta)
-    fa.plot_std_pixeles(df_etiqueta_std_pixel,
-                        'Desviación Estándar por Píxel Etiqueta ' + 
-                        str(etiqueta))
-
-    # Vemos los pixeles que "no varian mucho" (en comparacion a otros)
-    cota = 20
-    mat_etiqueta = fa.map_std(df_etiqueta_std_pixel, cota)
-    fa.plot_map_std(mat_etiqueta,
-                    'Pixeles con Desviación Estándar baja Etiqueta ' + 
-                    str(etiqueta))
-
+    # Calculamos desviación y media junto a sus matrices
+    df_etiqueta_std_pixel = fa.std_pixeles(df_etiqueta, label=False)
+    df_etiqueta_mean_pixel = fa.mean_pixeles(df_etiqueta, label=False)
+    mat_std_etiqueta = fa.map_metrica(df_etiqueta_std_pixel, 'std')
+    mat_mean_etiqueta = fa.map_metrica(df_etiqueta_mean_pixel, 'mean')
+    
+    # Graficamos
+    fa.plot_maps(mat_std_etiqueta, 'Desvío estándar por Píxel',
+                 mat_mean_etiqueta, 'Promedio por Píxel')
+    
 # Se puede apreciar que según distintos tipos de prenda cambia bastante la
-# forma de los gráficos, hasta se puede distinguir si son calzados o no según
-# la forma de los datos, lo que indica que hay cierto grdo de acierto en lo que
-# estamos analizando
+# forma de los gráficos, hasta se puede distinguir si de que clase son según
+# la forma de los datos, lo que indica que hay cierto grado de acierto en lo 
+# que estamos analizando. Utilizar estas imagenes para comparación intraclase.

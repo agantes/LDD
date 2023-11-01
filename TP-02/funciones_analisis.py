@@ -20,7 +20,7 @@ los datos.
 '''
 
 
-def std_pixeles(df: pd.DataFrame, label=True) -> pd.DataFrame:
+def std_pixeles(df: pd.DataFrame, label: bool = True) -> pd.DataFrame:
     '''
     Transforma el df en otro con los pixeles en una columna 'posicion' y 
     la desviacion estandar en una columna 'std'. Dependiendo del parametro
@@ -41,6 +41,26 @@ def std_pixeles(df: pd.DataFrame, label=True) -> pd.DataFrame:
 
     return pd.DataFrame(std_por_posicion)
 
+def mean_pixeles(df: pd.DataFrame, label:bool = True) -> pd.DataFrame:
+    '''
+    Transforma el df en otro con los pixeles en una columna 'posicion' y 
+    la desviacion estandar en una columna 'mean'. Dependiendo del parametro
+    'label' verificamos si es que el df viene con una columna con las etiquetas
+    y consecuentemente se la retiramos. Si esta la necesidad de filtrar por 
+    etiqueta, hacerlo previamente.
+    '''
+    if label:
+        posiciones = list(set(df.columns) - {'label'})
+    else:
+        posiciones = df.columns
+    mean_por_posicion = {'posicion': [], 'mean': []}
+    for posicion in posiciones:
+        numero_posicion_str: list = re.findall(r'\d+', posicion)
+        numero_posicion = int(numero_posicion_str[0])
+        mean_por_posicion['posicion'].append(numero_posicion)
+        mean_por_posicion['mean'].append(df[posicion].mean())
+
+    return pd.DataFrame(mean_por_posicion)
 
 def plot_std_pixeles(df: pd.DataFrame, title: str) -> None:
     '''
@@ -59,27 +79,24 @@ def plot_std_pixeles(df: pd.DataFrame, title: str) -> None:
     plt.show()
     plt.close()
 
-
-def map_std(df: pd.DataFrame, cota: float) -> np.array:
+def map_metrica(df: pd.DataFrame, metrica: str) -> np.array:
     '''
     Esta funcion nos permite generar una matriz de 28 x 28 que contiene todos
-    los pixeles y resalta si estan por debajo de cierta desviación estándar.
-    El df de entrada tiene que ser aquel resultante de std_pixeles.
+    los pixeles y le adjunta a cada pixel alguna metrica. El df de entrada 
+    tiene que ser aquel resultante de std_pixeles o mean_pixeles
     '''
     # Ordenamos las posiciones para poder romper aporpiadamente
     # el dataframe
     df = df.sort_values('posicion')
-    stds = list(df['std'])
+    metrica = list(df[metrica])
 
     # Voy generando la matriz como lista de listas
     res = list()
     current_row = list()
     i: int = 1
     while i <= 784:
-        if stds[i - 1] <= cota:
-            current_row.append(1)
-        else:
-            current_row.append(0)
+        # Agregamos la metrica al pixel corriente
+        current_row.append(metrica[i - 1])
 
         # El 27 viene por el index 0, esto implica que terminamos la fila
         if (i % 28 == 0) and (i != 0):
@@ -90,46 +107,36 @@ def map_std(df: pd.DataFrame, cota: float) -> np.array:
     return np.array(res)
 
 
-def plot_map_std(mat: np.array, title: str) -> None:
+def plot_map(mat: np.array, title: str) -> None:
     '''
-    Plotea la data conseguida por map_std en forma de imagen de 28 x 28
+    Plotea la data conseguida por map_metrica en forma de imagen de 28 x 28
     con matplotlib. 
     '''
-    fig, ax = plt.subplots(figsize=(4, 4))
-    plt.imshow(mat, cmap='Greys', origin='upper')
+    fig, ax = plt.figure(figsize=(4,4))
+    plt.imshow(mat, cmap='magma', origin='upper')
     plt.title(title)
+    plt.colorbar(shrink=0.8)
     plt.show()
     plt.close()
 
-
-def plot_dist_mat(df: pd.DataFrame, cota: float,
-                  title1: str, title2: str) -> None:
+def plot_maps(mat1: np.array, title1:str,
+              mat2: np.array, title2:str) -> None:
     '''
-    Esta función genera un ploteo doble con la distribución de desviaciones
-    estándar junto a las posiciones de la imagen que tengan la std por debajo
-    de un valor cota. La cota se graficara en la distribución y el df debe ser
-    resultado de aplicar std_pixeles
+    Genera un plot en paralelo de dos np.arrays basandose en las otras
+    funciones.
     '''
-    # Genero la matriz
-    imagen = map_std(df, cota)
-
-    # Grafico
     fig, axes = plt.subplots(1, 2, figsize=(8, 4))
-    sns.scatterplot(data=df, x='posicion', y='std', ax=axes[0])
-    sns.kdeplot(data=df, x='posicion', y='std',
-                color='black', alpha=.5, ax=axes[0])
-    axes[0].axhline(cota, color='red', label='Cota')
-    axes[0].legend()
-    axes[0].grid()
-    axes[0].set_xlabel('Píxeles')
-    axes[0].set_ylabel('Desviación Estándar')
+    im1 = axes[0].imshow(mat1, cmap='inferno', origin='upper')
     axes[0].set_title(title1)
-    axes[1].imshow(imagen, cmap='Greys')
+    plt.colorbar(im1, shrink=.7, ax=axes[0])
+    im2 = axes[1].imshow(mat2, cmap='inferno', origin='upper')
     axes[1].set_title(title2)
+    plt.colorbar(im2, shrink=.7, ax=axes[1])
     plt.show()
     plt.close()
 
-
+# def plot_promedios_clases
+    
 if __name__ == '__main__':
     # Seccio=ón para posibles usos o pruebas
     pass
