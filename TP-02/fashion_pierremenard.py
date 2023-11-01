@@ -11,7 +11,7 @@ Detalle     :
     en la que se encuentran todos los archivos. NO entregar dataset.
     
 Creacion    : 25/10/2023
-Modificacion: 26/10/2023
+Modificacion: 1/11/2023
 """
 
 # %% Importacion de librerias
@@ -82,3 +82,12 @@ for etiqueta in etiquetas:
 # forma de los gráficos, hasta se puede distinguir si de que clase son según
 # la forma de los datos, lo que indica que hay cierto grado de acierto en lo 
 # que estamos analizando. Utilizar estas imagenes para comparación intraclase.
+
+# Genero un gráfico que permita comparar todas las clases en paralelo 
+# con sus imagenes promedio.
+fa.plot_promedios_clases(df)
+
+# Eliminamos variables de uso temporal de esta sección
+del etiquetas, etiqueta, df_etiqueta
+del df_etiqueta_mean_pixel, df_etiqueta_std_pixel
+del mat_mean_etiqueta, mat_std_etiqueta
