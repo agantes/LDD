@@ -5,7 +5,7 @@ Detalle     :
     Este archivo contiene solamente funciones relacionadas con la exploración de 
     los datos.    
 Creacion    : 27/10/2023
-Modificacion: 1/11/2023
+Modificacion: 3/11/2023
 """
 
 import pandas as pd
@@ -112,11 +112,11 @@ def plot_map(mat: np.array, title: str) -> None:
     Plotea la data conseguida por map_metrica en forma de imagen de 28 x 28
     con matplotlib. 
     '''
-    fig, ax = plt.figure(figsize=(4,4))
-    plt.imshow(mat, cmap='magma', origin='upper')
+    fig, ax = plt.subplots(figsize=(4,4))
+    plt.imshow(mat, cmap='inferno', origin='upper')
     plt.title(title)
-    plt.set_xticks([])
-    plt.set_yticks([])
+    ax.set_xticks([])
+    ax.set_yticks([])
     plt.colorbar(shrink=0.8)
     plt.show()
     plt.close()
