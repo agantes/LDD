@@ -113,7 +113,11 @@ del X,Y,df2
 
 #Creamos nuestro KNN clasificador
 
-hiper_parametros = {'n_neighbors':[i for i in range(3,15)]}   
+pixelI = #que pueda ser cualquier pixel del df
+pixelJ = #idem
+pixelK = #idem
+
+hiper_parametros = {'kernel':['pixelI','pixelJ','pixelK'],'n_neighbors':[i for i in range(3,15)]}    
 
 clf = sk.model_selection.GridSearchCV(df, hiper_parametros)#busqueda exhaustiva 
 buscar = clf.fit(X,Y)
