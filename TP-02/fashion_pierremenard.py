@@ -93,3 +93,29 @@ for etiqueta in etiquetas:
 # forma de los gráficos, hasta se puede distinguir si son calzados o no según
 # la forma de los datos, lo que indica que hay cierto grdo de acierto en lo que
 # estamos analizando
+
+
+#%% KNN
+
+# Tenemos desde antes que df = nuestro dataframe
+
+#Separo el dataframe , me quedo solo con pantalones y remeras(labels 0 y 1)
+df2 = df[(df['label']==0)|(df['label']==1)]
+
+#Creo los features y el target
+X=df2.drop(columns ='label')
+Y=df2[['label']]
+
+X_train , X_test , Y_train , Y_test = train_test_split(X,Y,test_size=0.1,random_state=0,stratify=Y)
+
+#Borramos las variables
+del X,Y,df2
+
+#Creamos nuestro KNN clasificador
+
+hiper_parametros = {'n_neighbors':[i for i in range(3,15)]}   
+
+clf = sk.model_selection.GridSearchCV(df, hiper_parametros)#busqueda exhaustiva 
+buscar = clf.fit(X,Y)
+buscar.best_params_
+buscar.best_score_
