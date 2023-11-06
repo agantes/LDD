@@ -98,9 +98,9 @@ for etiqueta in etiquetas:
 #%% KNN
 
 # Tenemos desde antes que df = nuestro dataframe
-
+df2 = df
 #Separo el dataframe , me quedo solo con pantalones y remeras(labels 0 y 1)
-df2 = df[(df['label']==0)|(df['label']==1)]
+df2 = df2[(df['label']==0)|(df['label']==1)]
 
 #Creo los features y el target
 X=df2.drop(columns ='label')
@@ -110,16 +110,19 @@ Y=df2[['label']]
 X_train , X_test , Y_train , Y_test = train_test_split(X,Y,test_size=0.1,random_state=0,stratify=Y)
 
 #Borramos las variables
-del X,Y,df2
+del X,Y
 
 #Creamos nuestro KNN clasificador
 
-hyper_parametros = {'n_neighbors':[i for i in range(3,15)]}    
+hyper_parametros = {'n_neighbors':[i for i in range(3,20)]}    
 
-clf = sk.model_selection.GridSearchCV(df2, hyper_parametros)#busqueda exhaustiva 
+knn_model = KNeighborsClassifier()
+
+
+clf = GridSearchCV(knn_model, hyper_parametros)#busqueda exhaustiva 
 buscar = clf.fit(X_train,Y_train)
-buscar.best_params_
-buscar.best_score_
+buscar.best_params_ #Nos dice que la mejor opcion es k = 12
+buscar.best_score_ #Da un 94% de score
 
 
 #%% Clasificación multiclase
