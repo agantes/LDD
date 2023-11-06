@@ -104,6 +104,7 @@ df2 = df[(df['label']==0)|(df['label']==1)]
 
 #Creo los features y el target
 X=df2.drop(columns ='label')
+X= X[['pixel406','pixel407','pixel408']]
 Y=df2[['label']]
 
 X_train , X_test , Y_train , Y_test = train_test_split(X,Y,test_size=0.1,random_state=0,stratify=Y)
@@ -113,13 +114,9 @@ del X,Y,df2
 
 #Creamos nuestro KNN clasificador
 
-pixelI = #que pueda ser cualquier pixel del df
-pixelJ = #idem
-pixelK = #idem
+hiper_parametros = {'n_neighbors':[i for i in range(3,15)]}    
 
-hiper_parametros = {'kernel':['pixelI','pixelJ','pixelK'],'n_neighbors':[i for i in range(3,15)]}    
-
-clf = sk.model_selection.GridSearchCV(df, hiper_parametros)#busqueda exhaustiva 
-buscar = clf.fit(X,Y)
+clf = sk.model_selection.GridSearchCV(df2, hiper_parametros)#busqueda exhaustiva 
+buscar = clf.fit(X_train,Y_train)
 buscar.best_params_
 buscar.best_score_
