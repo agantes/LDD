@@ -124,6 +124,11 @@ buscar = clf.fit(X_train,Y_train)
 buscar.best_params_ #Nos dice que la mejor opcion es k = 12
 buscar.best_score_ #Da un 94% de score
 
+cross_val_score(clf, X_train, Y_train, cv=5)
+
+cross_val_score(clf, X_test, Y_test,cv=5)
+
+
 
 #%% Clasificación multiclase
 
