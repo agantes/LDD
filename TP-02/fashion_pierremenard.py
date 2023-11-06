@@ -21,6 +21,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import re
 import funciones_analisis as fa  # funciones de analisis
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 # %% Carga de Datos
 df = pd.read_csv('fashion-mnist.csv', encoding='utf-8')
