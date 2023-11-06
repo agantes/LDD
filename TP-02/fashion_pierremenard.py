@@ -127,15 +127,23 @@ buscar.best_score_ #Da un 94% de score
 
 #%% Clasificación multiclase
 
+
 x1=df.drop(columns ='label')
 y1=df[['label']]
 
-X1_train , x1_test , y1_train , y1_test = train_test_split(x1,y1,test_size=0.1,random_state=0,stratify=y1)
+
+x1_train , x1_test , y1_train , y1_test = train_test_split(x1,y1,test_size=0.1,random_state=0,stratify=y1)
+
+tree = DecisionTreeClassifier(random_state=0) #creo un arbol de tipo gini con altura 5
 
 hyper_params = {'criterion' : ["gini", "entropy"],
-                'max_depth' : [10,11,12,13,14,15,20] }
+                'max_depth' : [4,5,6,7,8,9,10,11,12,13,14] }
 
-clf2 = sk.model_selection.GridSearchCV(df, hyper_params)#busqueda exhaustiva 
-buscar = clf2.fit(x1_train,y1_train)
+clf = GridSearchCV(tree, hyper_params)#busqueda exhaustiva 
+
+buscar = clf.fit(x1_train,y1_train)
 buscar.best_params_
 buscar.best_score_
+
+cross_val_score(clf, x1_train, y1_train, cv=5)
+cross_val_score(clf, x1_test, y1_test, cv=5)
