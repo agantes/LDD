@@ -114,9 +114,25 @@ del X,Y,df2
 
 #Creamos nuestro KNN clasificador
 
-hiper_parametros = {'n_neighbors':[i for i in range(3,15)]}    
+hyper_parametros = {'n_neighbors':[i for i in range(3,15)]}    
 
-clf = sk.model_selection.GridSearchCV(df2, hiper_parametros)#busqueda exhaustiva 
+clf = sk.model_selection.GridSearchCV(df2, hyper_parametros)#busqueda exhaustiva 
 buscar = clf.fit(X_train,Y_train)
+buscar.best_params_
+buscar.best_score_
+
+
+#%% Clasificación multiclase
+
+x1=df.drop(columns ='label')
+y1=df[['label']]
+
+X1_train , x1_test , y1_train , y1_test = train_test_split(x1,y1,test_size=0.1,random_state=0,stratify=y1)
+
+hyper_params = {'criterion' : ["gini", "entropy"],
+                'max_depth' : [10,11,12,13,14,15,20] }
+
+clf2 = sk.model_selection.GridSearchCV(df, hyper_params)#busqueda exhaustiva 
+buscar = clf2.fit(x1_train,y1_train)
 buscar.best_params_
 buscar.best_score_
