@@ -5,7 +5,7 @@ Detalle     :
     Este archivo contiene el desarrollo de todas las actividades dispuestas 
     en el TP-02 de manera tal que se ejecute el código por secciones. Se 
     comentaran los hallazgos a lo largo del codigo. Decidir que hacer con 
-    funciones auxiliares, si es3 que usamos.
+    funciones auxiliares, si es que usamos.
     
     Importante: se asume que el proyecto de Spyder esta situado en la carpeta
     en la que se encuentran todos los archivos. NO entregar dataset.
@@ -17,6 +17,7 @@ Modificacion: 3/11/2023
 # %% Importacion de librerias
 import pandas as pd
 import seaborn as sns
+import numpy as np
 import matplotlib.pyplot as plt
 import funciones_analisis as fa  # funciones de analisis
 
@@ -75,7 +76,7 @@ for etiqueta in etiquetas:
     mat_mean_etiqueta = fa.map_metrica(df_etiqueta_mean_pixel, 'mean')
 
     # Graficamos
-    fa.plot_maps(mat_std_etiqueta, 
+    fa.plot_maps(mat_std_etiqueta,
                  f'Desvío estándar por Píxel etiqueta {etiqueta}',
                  mat_mean_etiqueta,
                  f'Promedio por Píxel etiqueta {etiqueta}')
@@ -93,3 +94,41 @@ fa.plot_promedios_clases(df)
 del etiquetas, etiqueta, df_etiqueta
 del df_etiqueta_mean_pixel, df_etiqueta_std_pixel
 del mat_mean_etiqueta, mat_std_etiqueta
+
+# %%% Analisis auxiliar sobre etiquetas 0 y 1
+
+# Sabemos que todas las clases estan balanceadas, todas poseen 6000 imagenes
+# Analizamos que píxeles son útiles según std para diferenciar las clases
+# Seleccionamos la info correspondiente a cada etiqueta
+etiqueta0 = df[df['label'] == 0].drop('label', axis=1)
+etiqueta1 = df[df['label'] == 1].drop('label', axis=1)
+
+# Pasamos la información al std de cada píxel
+std_etiqueta0 = fa.std_pixeles(etiqueta0, label=False)
+std_etiqueta1 = fa.std_pixeles(etiqueta1, label=False)
+
+# Generamos los np.arrays de cada etiqueta
+mat_std_etiqueta0 = fa.map_metrica(std_etiqueta0, 'std')
+mat_std_etiqueta1 = fa.map_metrica(std_etiqueta1, 'std')
+
+# Analizamos por separado la std
+fa.plot_map(mat_std_etiqueta0, 'Desvío Estándar etiqueta 0')
+fa.plot_map(mat_std_etiqueta1, 'Desvío Estándar etiqueta 1')
+
+# Parece buena idea elegir los pixeles que se encuentran en el medio de los
+# pantalones que parecen poseer entre 20 y 40 de std
+# Son los pixeles que mas varian para una remera
+# Vemos como localizar estos pixeles
+
+# Separo la parte de interes a prueba y error
+cotas = (14, 28, 13, 16)  # poiciones según min, max y ver, hor
+rdi0 = mat_std_etiqueta0[cotas[0]:cotas[1], cotas[2]:cotas[3]] 
+rdi1 = mat_std_etiqueta1[cotas[0]:cotas[1], cotas[2]:cotas[3]] 
+fa.plot_map(rdi0, 'Área de Interes\netiqueta 0')
+fa.plot_map(rdi1, 'Área de Interes\netiqueta 1')
+
+# Observamos que en la clase 0 la zona de interes es sumamente uniforme 
+# mientras que en la clase 1 hay una sección de baja std, hacemos foco en esa
+# zona
+# Recuperamos las posiciones
+lista_posiciones = fa.recuperar_posciciones(*cotas)
