@@ -13,19 +13,18 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 
-def iteracion_posiciones(df: pd.DataFrame, posiciones: list) -> dict:
+def iteracion_posiciones(df: pd.DataFrame, posiciones: list) -> list:
     '''
     Esta función se encarga de realizar el proceso de separación de datos,
     entrenamiento y evaluación de cada modelo generado según los tres 
     píxeles seleccionados de una lista de listas.
-    La función retorna un dicc de modelos entrenados con los mejores 
+    La función retorna una lista de modelos entrenados con los mejores 
     parametros según los píxeles seleccionados junto a los píxeles y 
     el score de validación.
     '''
     
     # Iteramos por lista de posiciones, c\cjto contiene 3 labels
-    res = dict()
-    cuenta: int = 0  # contador para etiquetar modelos
+    res = list()
     for cjto in posiciones:
         
         # Separamos features de target
@@ -53,8 +52,7 @@ def iteracion_posiciones(df: pd.DataFrame, posiciones: list) -> dict:
         score_val = cross_val_score(clf, X_val, Y_val, cv=5).mean()
         
         # Agregamos los datos que nos parecen importantes al resultado
-        res[f'modelo {cuenta}'] = [cjto, clf, score_val]
-        cuenta += 1
+        res.append([cjto, clf, score_val])
         
     return res
         

@@ -139,7 +139,7 @@ del etiqueta0, etiqueta1, std_etiqueta0, std_etiqueta1
 del mat_std_etiqueta0, mat_std_etiqueta1
 del cotas, rdi0, rdi1, lista_posiciones  
 
-#%% KNN sobre clases 0 y 1
+# %% KNN sobre clases 0 y 1
 
 # Separo el dataframe, me quedo solo con pantalones y remeras (labels 0 y 1)
 df_knn = df[(df['label'] == 0) | (df['label'] == 1)]
@@ -151,25 +151,29 @@ cotas = (14, 28, 13, 16)
 lista_posiciones = fa.recuperar_posciciones(*cotas)
 modelos_knn = fm.iteracion_posiciones(df_knn, lista_posiciones)
 
+# El random_state es 0 para el train_test_split
 # Buscamos aquel que tenga el mayor cross_val_score
 max_puntaje: float = 0 
-for k, v in modelos_knn.items():
-    if v[2] > max_puntaje:
-        max_posiciones = v[0]
-        max_modelo = v[1]
-        max_puntaje = v[2]
+for modelo in modelos_knn:
+    if modelo[2] > max_puntaje:
+        max_posiciones = modelo[0]
+        max_modelo = modelo[1]
+        max_puntaje = modelo[2]
 print('Mejor tripla:', max_posiciones)
 print('Mayor puntaje:', max_puntaje)
 print('Parametros:', max_modelo.best_params_)
 
 # Según la última ejecución, el mejor parametro es un k de 8 con el uso de 
-# píxeles intermedios de la sección de interes seleccionada
+# píxeles intermedios de la sección de interes seleccionada (630, 631, 632)
 # El puntaje es de 0.97, aproximadamente
+
+# %%% Descarte Analisis KNN
 
 # Borramos los datos que no son relevantes para la siguiente sección
 del df_knn, cotas, lista_posiciones, modelos_knn
+del max_modelo, max_puntaje, max_posiciones, modelo
 
-#%% Clasificación multiclase
+# %% Clasificación multiclase
 
 x1=df.drop(columns ='label')
 y1=df[['label']]
