@@ -175,21 +175,66 @@ del max_modelo, max_puntaje, max_posiciones, modelo
 
 # %% Clasificación multiclase
 
-x1=df.drop(columns ='label')
-y1=df[['label']]
+# Probamos primero el dataset "crudo" sin ninguna alteración
 
-x1_train , x1_test , y1_train , y1_test = train_test_split(x1,y1,test_size=0.1,random_state=0,stratify=y1)
+# Separamos los features y los target
+X = df.drop(columns ='label')
+Y = df[['label']]
 
-tree = DecisionTreeClassifier(random_state=0) #creo un arbol de tipo gini con altura 5
+# Separamos los datos para desarrollo y evaluación
+X_dev , X_val , Y_dev , Y_val = train_test_split(
+    X, Y, test_size=0.2, random_state=0, stratify=Y)
 
-hyper_params = {'criterion' : ["gini", "entropy"],
-                'max_depth' : [4,5,6,7,8,9,10,11,12,13,14] }
+# Inicializamos un modelo junto a hiperparametros
+tree = DecisionTreeClassifier(random_state=0) 
+hiper_params = {
+    'criterion' : ["gini", "entropy"],
+    'max_depth' : [i for i in range(10, 15)]
+    }
 
-clf = GridSearchCV(tree, hyper_params)#busqueda exhaustiva 
+# Realizamos una busqueda exhaustiva de los mejores parametros
+# Anlizamos con validación cruzada con data que nunca vio el modelo
+clf = GridSearchCV(tree, hiper_params)
+clf.fit(X_dev, Y_dev)
+max_params = clf.best_params_
+max_score = clf.best_score_
+score_val = cross_val_score(clf, X_val, Y_val, cv=5)
 
-buscar = clf.fit(x1_train,y1_train)
-buscar.best_params_
-buscar.best_score_
+# Tarda bastante, realizar un dropeo de pixeles de poca variación es buena idea
+# por si necesitamos correrlo varias veces
+# El hecho de que también entrenemos 10 profundidades diferentes con dos tipos
+# de criterios tampoco ayuda
 
-cross_val_score(clf, x1_train, y1_train, cv=5)
-cross_val_score(clf, x1_test, y1_test, cv=5)
+# %%% Eliminación de regiones con poca variación
+
+# Seleccionamos features por arriba de cierta cota de variación
+cota_std: float = 80  # con esta cota se recortan 300 labels
+df_std = fa.std_pixeles(df, cambiar_etiquetas=False)
+df_std = df_std[df_std['std'] > cota_std]
+etiquetas_utilizar = list(df_std['posicion'])
+
+# Replicamos la sección anterior con este nuevo df
+
+# Separamos los features y los target
+X = df.drop(columns='label')
+X = X[etiquetas_utilizar]
+Y = df[['label']]
+
+# Separamos los datos para desarrollo y evaluación
+X_dev , X_val , Y_dev , Y_val = train_test_split(
+    X, Y, test_size=0.2, random_state=0, stratify=Y)
+
+# Inicializamos un modelo junto a hiperparametros
+tree = DecisionTreeClassifier(random_state=0) 
+hiper_params = {
+    'criterion' : ["gini", "entropy"],
+    'max_depth' : [i for i in range(10, 15)]
+    }
+
+# Realizamos una busqueda exhaustiva de los mejores parametros
+# Anlizamos con validación cruzada con data que nunca vio el modelo
+clf = GridSearchCV(tree, hiper_params)
+clf.fit(X_dev, Y_dev)
+max_params = clf.best_params_
+max_score = clf.best_score_
+score_val = cross_val_score(clf, X_val, Y_val, cv=5)

@@ -19,7 +19,8 @@ Este archivo contiene solamente funciones relacionadas con la exploración de
 los datos.
 '''
 
-def std_pixeles(df: pd.DataFrame, label: bool = True) -> pd.DataFrame:
+def std_pixeles(df: pd.DataFrame, label: bool = True, 
+                cambiar_etiquetas: bool = True) -> pd.DataFrame:
     '''
     Transforma el df en otro con los pixeles en una columna 'posicion' y 
     la desviacion estandar en una columna 'std'. Dependiendo del parametro
@@ -31,16 +32,26 @@ def std_pixeles(df: pd.DataFrame, label: bool = True) -> pd.DataFrame:
         posiciones = list(set(df.columns) - {'label'})
     else:
         posiciones = df.columns
+    
+    # Iteramos sobre las etiquetas
     std_por_posicion = {'posicion': [], 'std': []}
     for posicion in posiciones:
-        numero_posicion_str: list = re.findall(r'\d+', posicion)
-        numero_posicion = int(numero_posicion_str[0])
+        
+        # Cambiamos el nombre de las etiquetas a numeros, si lo deseamos
+        if cambiar_etiquetas:
+            numero_posicion_str: list = re.findall(r'\d+', posicion)
+            numero_posicion = int(numero_posicion_str[0])
+        else:
+            numero_posicion = posicion
+        
+        # Adjuntamos la etiqueta junto a la std
         std_por_posicion['posicion'].append(numero_posicion)
         std_por_posicion['std'].append(df[posicion].std())
 
     return pd.DataFrame(std_por_posicion)
 
-def mean_pixeles(df: pd.DataFrame, label:bool = True) -> pd.DataFrame:
+def mean_pixeles(df: pd.DataFrame, label:bool = True,
+                 cambiar_etiquetas: bool = True) -> pd.DataFrame:
     '''
     Transforma el df en otro con los pixeles en una columna 'posicion' y 
     la desviacion estandar en una columna 'mean'. Dependiendo del parametro
@@ -52,10 +63,19 @@ def mean_pixeles(df: pd.DataFrame, label:bool = True) -> pd.DataFrame:
         posiciones = list(set(df.columns) - {'label'})
     else:
         posiciones = df.columns
+        
+    # Itermaos sobre etiquetas    
     mean_por_posicion = {'posicion': [], 'mean': []}
     for posicion in posiciones:
-        numero_posicion_str: list = re.findall(r'\d+', posicion)
-        numero_posicion = int(numero_posicion_str[0])
+        
+        # Cambiamos las etiquetas si deseamos
+        if cambiar_etiquetas:
+            numero_posicion_str: list = re.findall(r'\d+', posicion)
+            numero_posicion = int(numero_posicion_str[0])
+        else:
+            numero_posicion = posicion
+        
+        # Adjuntamos etiquetas y promedios
         mean_por_posicion['posicion'].append(numero_posicion)
         mean_por_posicion['mean'].append(df[posicion].mean())
 
