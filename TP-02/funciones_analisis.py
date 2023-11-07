@@ -1,4 +1,4 @@
-"""
+'''
 Materia     : Laboratorio de datos - FCEyN - UBA
 Autores     : Augusto Gantes, Martin Belmes y Matias D'Andrea
 Detalle     : 
@@ -6,7 +6,7 @@ Detalle     :
     los datos.    
 Creacion    : 27/10/2023
 Modificacion: 3/11/2023
-"""
+'''
 
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -191,7 +191,7 @@ def recuperar_posciciones(cota_inferior_vertical: int,
                           cota_superior_vertical: int,
                           cota_inferior_horizontal: int,
                           cota_superior_horizontal: int) -> list:
-    """
+    '''
     Esta función tiene como objetivo recuperar píxeles según ciertas cotas
     que tengan como referencia a la imagen cudrada de 28 x 28. El reultado
     retorna una lista de listas, donde cada lista contiene tres pixeles que 
@@ -199,7 +199,7 @@ def recuperar_posciciones(cota_inferior_vertical: int,
     consecutivos horizontalmente. 
     Esta función esta dedicada a la sección auxiliar que nos permite ver
     que pixeles on útiles para la comparación entre etiquetas 0 y 1.
-    """
+    '''
     res = list()
     
     # Genero la iteración por filas, incluyendo la última

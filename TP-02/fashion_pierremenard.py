@@ -1,4 +1,4 @@
-"""
+'''
 Materia     : Laboratorio de datos - FCEyN - UBA
 Autores     : Augusto Gantes, Martin Belmes y Matias D'Andrea
 Detalle     : 
@@ -12,20 +12,17 @@ Detalle     :
     
 Creacion    : 25/10/2023
 Modificacion: 3/11/2023
-"""
+'''
 
 # %% Importacion de librerias
 import pandas as pd
-import seaborn as sns
-import numpy as np
-import matplotlib.pyplot as plt
 import funciones_analisis as fa  # funciones de analisis
+import funciones_modelos as fm  # funciones de modelos
 from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
 
-# %% Carga de Datos
+# Carga de Datos
 df = pd.read_csv('fashion-mnist.csv', encoding='utf-8')
 
 # %% Analisis de los Datos
@@ -142,37 +139,35 @@ del etiqueta0, etiqueta1, std_etiqueta0, std_etiqueta1
 del mat_std_etiqueta0, mat_std_etiqueta1
 del cotas, rdi0, rdi1, lista_posiciones  
 
-#%% KNN sobre clase 0 y 1
+#%% KNN sobre clases 0 y 1
 
-# Tenemos desde antes que df = nuestro dataframe
-df2 = df
-#Separo el dataframe , me quedo solo con pantalones y remeras(labels 0 y 1)
-df2 = df2[(df['label']==0)|(df['label']==1)]
+# Separo el dataframe, me quedo solo con pantalones y remeras (labels 0 y 1)
+df_knn = df[(df['label'] == 0) | (df['label'] == 1)]
 
-#Creo los features y el target
-X=df2.drop(columns ='label')
-X= X[['pixel406','pixel407','pixel408']]
-Y=df2[['label']]
+# Basandonos en el analisis auxiliar de la etiqueta 0 y 1, entrenamos al
+# clasificador con diferentes sets de 3 pixeles según las regiones de interes
+# encontrada
+cotas = (14, 28, 13, 16) 
+lista_posiciones = fa.recuperar_posciciones(*cotas)
+modelos_knn = fm.iteracion_posiciones(df_knn, lista_posiciones)
 
-X_train , X_test , Y_train , Y_test = train_test_split(X,Y,test_size=0.1,random_state=0,stratify=Y)
+# Buscamos aquel que tenga el mayor cross_val_score
+max_puntaje: float = 0 
+for k, v in modelos_knn.items():
+    if v[2] > max_puntaje:
+        max_posiciones = v[0]
+        max_modelo = v[1]
+        max_puntaje = v[2]
+print('Mejor tripla:', max_posiciones)
+print('Mayor puntaje:', max_puntaje)
+print('Parametros:', max_modelo.best_params_)
 
-#Borramos las variables
-del X,Y
+# Según la última ejecución, el mejor parametro es un k de 8 con el uso de 
+# píxeles intermedios de la sección de interes seleccionada
+# El puntaje es de 0.97, aproximadamente
 
-#Creamos nuestro KNN clasificador
-
-hyper_parametros = {'n_neighbors':[i for i in range(3,20)]}    
-
-knn_model = KNeighborsClassifier()
-
-clf = GridSearchCV(knn_model, hyper_parametros)#busqueda exhaustiva 
-buscar = clf.fit(X_train,Y_train)
-buscar.best_params_ #Nos dice que la mejor opcion es k = 12
-buscar.best_score_ #Da un 94% de score
-
-cross_val_score(clf, X_train, Y_train, cv=5)
-
-cross_val_score(clf, X_test, Y_test,cv=5)
+# Borramos los datos que no son relevantes para la siguiente sección
+del df_knn, cotas, lista_posiciones, modelos_knn
 
 #%% Clasificación multiclase
 
