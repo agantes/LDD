@@ -20,6 +20,10 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 import funciones_analisis as fa  # funciones de analisis
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 # %% Carga de Datos
 df = pd.read_csv('fashion-mnist.csv', encoding='utf-8')
@@ -132,3 +136,61 @@ fa.plot_map(rdi1, 'Área de Interes\netiqueta 1')
 # zona
 # Recuperamos las posiciones
 lista_posiciones = fa.recuperar_posciciones(*cotas)
+
+# Eliminamos variables de analisis, posiblemente reciclemos lista_posiciones
+del etiqueta0, etiqueta1, std_etiqueta0, std_etiqueta1
+del mat_std_etiqueta0, mat_std_etiqueta1
+del cotas, rdi0, rdi1, lista_posiciones  
+
+#%% KNN sobre clase 0 y 1
+
+# Tenemos desde antes que df = nuestro dataframe
+df2 = df
+#Separo el dataframe , me quedo solo con pantalones y remeras(labels 0 y 1)
+df2 = df2[(df['label']==0)|(df['label']==1)]
+
+#Creo los features y el target
+X=df2.drop(columns ='label')
+X= X[['pixel406','pixel407','pixel408']]
+Y=df2[['label']]
+
+X_train , X_test , Y_train , Y_test = train_test_split(X,Y,test_size=0.1,random_state=0,stratify=Y)
+
+#Borramos las variables
+del X,Y
+
+#Creamos nuestro KNN clasificador
+
+hyper_parametros = {'n_neighbors':[i for i in range(3,20)]}    
+
+knn_model = KNeighborsClassifier()
+
+clf = GridSearchCV(knn_model, hyper_parametros)#busqueda exhaustiva 
+buscar = clf.fit(X_train,Y_train)
+buscar.best_params_ #Nos dice que la mejor opcion es k = 12
+buscar.best_score_ #Da un 94% de score
+
+cross_val_score(clf, X_train, Y_train, cv=5)
+
+cross_val_score(clf, X_test, Y_test,cv=5)
+
+#%% Clasificación multiclase
+
+x1=df.drop(columns ='label')
+y1=df[['label']]
+
+x1_train , x1_test , y1_train , y1_test = train_test_split(x1,y1,test_size=0.1,random_state=0,stratify=y1)
+
+tree = DecisionTreeClassifier(random_state=0) #creo un arbol de tipo gini con altura 5
+
+hyper_params = {'criterion' : ["gini", "entropy"],
+                'max_depth' : [4,5,6,7,8,9,10,11,12,13,14] }
+
+clf = GridSearchCV(tree, hyper_params)#busqueda exhaustiva 
+
+buscar = clf.fit(x1_train,y1_train)
+buscar.best_params_
+buscar.best_score_
+
+cross_val_score(clf, x1_train, y1_train, cv=5)
+cross_val_score(clf, x1_test, y1_test, cv=5)
