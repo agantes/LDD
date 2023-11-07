@@ -5,7 +5,7 @@ Detalle     :
     Este archivo contiene solamente funciones relacionadas con la exploración de 
     los datos.    
 Creacion    : 27/10/2023
-Modificacion: 3/11/2023
+Modificacion: 7/11/2023
 '''
 
 import pandas as pd

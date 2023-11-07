@@ -11,16 +11,16 @@ Detalle     :
     en la que se encuentran todos los archivos. NO entregar dataset.
     
 Creacion    : 25/10/2023
-Modificacion: 3/11/2023
+Modificacion: 7/11/2023
 '''
 
 # %% Importacion de librerias
 import pandas as pd
-import funciones_analisis as fa  # funciones de analisis
-import funciones_modelos as fm  # funciones de modelos
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.tree import DecisionTreeClassifier
+import funciones_analisis as fa  # funciones de analisis
+import funciones_modelos as fm  # funciones de modelos
 
 # Carga de Datos
 df = pd.read_csv('fashion-mnist.csv', encoding='utf-8')
@@ -189,7 +189,7 @@ X_dev , X_val , Y_dev , Y_val = train_test_split(
 tree = DecisionTreeClassifier(random_state=0) 
 hiper_params = {
     'criterion' : ["gini", "entropy"],
-    'max_depth' : [i for i in range(10, 15)]
+    'max_depth' : list(range(10, 15))
     }
 
 # Realizamos una busqueda exhaustiva de los mejores parametros
@@ -208,7 +208,7 @@ score_val = cross_val_score(clf, X_val, Y_val, cv=5)
 # %%% Eliminación de regiones con poca variación
 
 # Seleccionamos features por arriba de cierta cota de variación
-cota_std: float = 80  # con esta cota se recortan 300 labels
+cota_std: float = 80  # con esta cota se recortan 380 labels
 df_std = fa.std_pixeles(df, cambiar_etiquetas=False)
 df_std = df_std[df_std['std'] > cota_std]
 etiquetas_utilizar = list(df_std['posicion'])
@@ -228,7 +228,7 @@ X_dev , X_val , Y_dev , Y_val = train_test_split(
 tree = DecisionTreeClassifier(random_state=0) 
 hiper_params = {
     'criterion' : ["gini", "entropy"],
-    'max_depth' : [i for i in range(10, 15)]
+    'max_depth' : list(range(10, 15))
     }
 
 # Realizamos una busqueda exhaustiva de los mejores parametros
@@ -238,3 +238,13 @@ clf.fit(X_dev, Y_dev)
 max_params = clf.best_params_
 max_score = clf.best_score_
 score_val = cross_val_score(clf, X_val, Y_val, cv=5)
+
+# Los resultados de esta sección son extremadamente similares a la anterior
+# Esto es entendible ya que el arbol debería de hacer lo que estamos haciendo
+# de manera manual, sin necesidad de filtrado previo
+
+# Los resultados son: 
+#     max_depth = 11
+#     criterion = entropy
+#     max_score = 0.7999
+#     score_val.mean = 0.7645
