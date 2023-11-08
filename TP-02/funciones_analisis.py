@@ -5,7 +5,7 @@ Detalle     :
     Este archivo contiene solamente funciones relacionadas con la exploración de 
     los datos.    
 Creacion    : 27/10/2023
-Modificacion: 7/11/2023
+Modificacion: 8/11/2023
 '''
 
 import pandas as pd
@@ -232,6 +232,30 @@ def recuperar_posciciones(cota_inferior_vertical: int,
         res.append(lista_actual)        
     
     return res
+    
+def plot_cm(cm: np.array, title: str) -> None:
+    '''
+    Esta función se encarga de plotear una matriz de confusion generada a 
+    traves del mejor modelo conseguido por parte de la busqueda de modelos.
+    No utilizar la funcion integrada de sklearn para plotear la matriz.
+    '''
+    fig, ax = plt.subplots()
+    plt.title(title)
+    im = ax.imshow(cm, cmap='inferno')
+    # Anotaciones
+    for i in range(10):
+        for j in range(10):
+            if j == i: color='k'
+            else: color='w'
+            ax.text(j, i, np.round(cm[i, j], 2),
+                    ha="center", va="center", color=color, fontsize=8)
+    ax.set_xticks(list(range(10)))
+    ax.set_yticks(list(range(10)))
+    plt.xlabel('Etiqueta predecida')
+    plt.ylabel('Etiqueta verdadera')
+    plt.colorbar(im, ax=ax, ticks=np.arange(0, 1, .1))
+    plt.show()
+    plt.close()
     
     
 if __name__ == '__main__':

@@ -11,13 +11,14 @@ Detalle     :
     en la que se encuentran todos los archivos. NO entregar dataset.
     
 Creacion    : 25/10/2023
-Modificacion: 7/11/2023
+Modificacion: 8/11/2023
 '''
 
 # %% Importacion de librerias
 import pandas as pd
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import confusion_matrix
 from sklearn.tree import DecisionTreeClassifier
 import funciones_analisis as fa  # funciones de analisis
 import funciones_modelos as fm  # funciones de modelos
@@ -197,7 +198,7 @@ hiper_params = {
 clf = GridSearchCV(tree, hiper_params)
 clf.fit(X_dev, Y_dev)
 max_params = clf.best_params_
-max_score = clf.best_score_
+max_score = clf.best_score_  
 score_val = cross_val_score(clf, X_val, Y_val, cv=5)
 
 # Tarda bastante, realizar un dropeo de pixeles de poca variación es buena idea
@@ -208,7 +209,7 @@ score_val = cross_val_score(clf, X_val, Y_val, cv=5)
 # %%% Eliminación de regiones con poca variación
 
 # Seleccionamos features por arriba de cierta cota de variación
-cota_std: float = 80  # con esta cota se recortan 380 labels
+cota_std: float = 90  # con esta cota se recortan 380 labels
 df_std = fa.std_pixeles(df, cambiar_etiquetas=False)
 df_std = df_std[df_std['std'] > cota_std]
 etiquetas_utilizar = list(df_std['posicion'])
@@ -234,10 +235,16 @@ hiper_params = {
 # Realizamos una busqueda exhaustiva de los mejores parametros
 # Anlizamos con validación cruzada con data que nunca vio el modelo
 clf = GridSearchCV(tree, hiper_params)
-clf.fit(X_dev, Y_dev)
-max_params = clf.best_params_
-max_score = clf.best_score_
-score_val = cross_val_score(clf, X_val, Y_val, cv=5)
+search = clf.fit(X_dev, Y_dev)
+max_params = search.best_params_
+max_score = search.best_score_  # mejor score de entrenamiento
+score_val = cross_val_score(search, X_val, Y_val, cv=5)  # score de validacion
+
+# TODO chequear que funca este ploteo
+# Generamos una matriz de confusion 
+Y_pred = search.predict(X_val)
+cm = confusion_matrix(Y_val, Y_pred, normalize='true')
+fa.plot_cm(cm, 'Matriz de confusión del modelo')
 
 # Los resultados de esta sección son extremadamente similares a la anterior
 # Esto es entendible ya que el arbol debería de hacer lo que estamos haciendo
