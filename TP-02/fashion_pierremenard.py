@@ -144,29 +144,45 @@ del cotas, rdi0, rdi1, lista_posiciones
 
 # Separo el dataframe, me quedo solo con pantalones y remeras (labels 0 y 1)
 df_knn = df[(df['label'] == 0) | (df['label'] == 1)]
+X = df_knn.drop(columns='label')  
+Y = df_knn[['label']]
+
+# Separamos la data en dev y val
+X_dev , X_val , Y_dev , Y_val = train_test_split(
+    X, Y, test_size=0.2, random_state=0, stratify=Y)
 
 # Basandonos en el analisis auxiliar de la etiqueta 0 y 1, entrenamos al
 # clasificador con diferentes sets de 3 pixeles según las regiones de interes
 # encontrada
 cotas = (14, 28, 13, 16) 
 lista_posiciones = fa.recuperar_posciciones(*cotas)
-modelos_knn = fm.iteracion_posiciones(df_knn, lista_posiciones)
+modelos_knn = fm.iteracion_posiciones(X_dev, Y_dev, lista_posiciones)
 
 # El random_state es 0 para el train_test_split
 # Buscamos aquel que tenga el mayor cross_val_score
 max_puntaje: float = 0 
 for modelo in modelos_knn:
-    if modelo[2] > max_puntaje:
+    if modelo[1].best_score_ > max_puntaje:
         max_posiciones = modelo[0]
+        max_puntaje = modelo[1].best_score_
         max_modelo = modelo[1]
-        max_puntaje = modelo[2]
 print('Mejor tripla:', max_posiciones)
-print('Mayor puntaje:', max_puntaje)
 print('Parametros:', max_modelo.best_params_)
+print('Mejor puntaje:', max_puntaje)
+
+# Hacemos la validación cruzada con datos que nunca haya visto el modelo
+# para ver su desempeño
+val_score = cross_val_score(max_modelo, X_val, Y_val, cv=5)
 
 # Según la última ejecución, el mejor parametro es un k de 8 con el uso de 
 # píxeles intermedios de la sección de interes seleccionada (630, 631, 632)
 # El puntaje es de 0.97, aproximadamente
+
+# Los resultados son: 
+#     k = 6
+#     etiquetas: (630, 631, 632)
+#     max_score = 0.9707
+#     score_val.mean = 0.9841
 
 # %%% Descarte Analisis KNN
 
@@ -209,7 +225,7 @@ score_val = cross_val_score(clf, X_val, Y_val, cv=5)
 # %%% Eliminación de regiones con poca variación
 
 # Seleccionamos features por arriba de cierta cota de variación
-cota_std: float = 90  # con esta cota se recortan 380 labels
+cota_std: float = 90  # con esta cota se usan 200 etiquetas aprox
 df_std = fa.std_pixeles(df, cambiar_etiquetas=False)
 df_std = df_std[df_std['std'] > cota_std]
 etiquetas_utilizar = list(df_std['posicion'])
