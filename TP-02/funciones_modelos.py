@@ -5,11 +5,10 @@ Detalle     :
     Este archivo contiene funciones vinculadas al desarrollo de los modelos
     utilizados para analizar los datos.    
 Creacion    : 6/10/2023
-Modificacion: 6/11/2023
+Modificacion: 11/11/2023
 '''
 
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 

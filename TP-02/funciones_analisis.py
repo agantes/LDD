@@ -5,7 +5,7 @@ Detalle     :
     Este archivo contiene solamente funciones relacionadas con la exploración de 
     los datos.    
 Creacion    : 27/10/2023
-Modificacion: 8/11/2023
+Modificacion: 11/11/2023
 '''
 
 import pandas as pd
@@ -239,7 +239,7 @@ def plot_cm(cm: np.array, title: str) -> None:
     traves del mejor modelo conseguido por parte de la busqueda de modelos.
     No utilizar la funcion integrada de sklearn para plotear la matriz.
     '''
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6,6))
     plt.title(title)
     im = ax.imshow(cm, cmap='inferno')
     # Anotaciones

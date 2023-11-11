@@ -11,7 +11,7 @@ Detalle     :
     en la que se encuentran todos los archivos. NO entregar dataset.
     
 Creacion    : 25/10/2023
-Modificacion: 8/11/2023
+Modificacion: 11/11/2023
 '''
 
 # %% Importacion de librerias
@@ -256,7 +256,6 @@ max_params = search.best_params_
 max_score = search.best_score_  # mejor score de entrenamiento
 score_val = cross_val_score(search, X_val, Y_val, cv=5)  # score de validacion
 
-# TODO chequear que funca este ploteo
 # Generamos una matriz de confusion 
 Y_pred = search.predict(X_val)
 cm = confusion_matrix(Y_val, Y_pred, normalize='true')
@@ -271,3 +270,11 @@ fa.plot_cm(cm, 'Matriz de confusión del modelo')
 #     criterion = entropy
 #     max_score = 0.7999
 #     score_val.mean = 0.7645
+
+# %%% Descarte Analisis Arbol de Decisión
+
+# Borramos los datos restantes
+del cota_std, df_std, etiquetas_utilizar, X, Y
+del X_dev, X_val, Y_dev, Y_val, Y_pred
+del tree, hiper_params, clf, search
+del max_params, max_score, score_val, cm
